@@ -5,6 +5,8 @@ import RootLayout from "./RootLayout";
 import ProductDashboard from "./product-module/ProductDashboard";
 import CustomerDashboard from "./customer-module/CustomerDashboard";
 import OrderDashboard from "./order-module/OrderDashbarod";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const routes = createBrowserRouter([
   {
@@ -19,7 +21,11 @@ const routes = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={routes} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={routes} />
+    </Provider>
+  );
 }
 
 export default App;

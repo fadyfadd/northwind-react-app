@@ -1,7 +1,10 @@
 import { FC } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 const OrderDashboard: FC = () => {
-    return <div>Order Dashboard</div>
-}
+  //const count = useSelector((state: RootState) => state.authentication);
+  return <div>Order Dashboard</div>;
+};
 
-export default OrderDashboard
+export default OrderDashboard;
