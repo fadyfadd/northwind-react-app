@@ -4,7 +4,7 @@ export type ProductDto = {
   supplierId: number;
   categoryId: number;
   quantityPerUnit: string;
-  unitInStock: number;
+  unitsInStock: number;
   unitInOrder: number;
   reorderLevel: number;
   discontinued: false; 
