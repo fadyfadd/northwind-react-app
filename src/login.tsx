@@ -10,7 +10,7 @@ const Login: FC = () => {
 
   function clickMe() {
     dispatcher(
-      login({ isAuthenticated: true, userName: "fadyfadd", role: Role.Admin })
+      login({ isAuthenticated: true, userName: "fadyfadd", role: Role.Admin , token:'' , refreshToken:'' , tokenExpirationDate:new Date() })
     );
 
     navigator("/home");

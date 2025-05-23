@@ -2,29 +2,44 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Role } from "../role";
 
-export type UserProfile = {
+export type UserSecurityProfile = {
   isAuthenticated: boolean;
   userName: string | null;
-  role: Role | null;
+  role: Role;
+  token: string | null;
+  refreshToken: string | null;
+  tokenExpirationDate: Date | null;
 };
 
-let initialState: UserProfile = {
+let initialState: UserSecurityProfile = {
   isAuthenticated: false,
   userName: null,
-  role: null,
+  role: Role.Unknown,
+  refreshToken: null,
+  token: null,
+  tokenExpirationDate: null,
 };
 
 const authenticationSlice = createSlice({
   name: "authentication",
   initialState,
   reducers: {
-    login: (state: UserProfile, action: PayloadAction<UserProfile>) => {
+    login: (
+      state: UserSecurityProfile,
+      action: PayloadAction<UserSecurityProfile>
+    ) => {
       return { ...action.payload };
     },
-    logout: (state: UserProfile) => {
-      state.isAuthenticated = false;
-      state.userName = null;
-      state.role = null;
+    logout: (state: UserSecurityProfile) => {     
+       
+      return {
+        isAuthenticated: false,
+        userName: null,
+        role: Role.Unknown,
+        refreshToken: null,
+        token: null,
+        tokenExpirationDate: null,
+      };
     },
   },
 });
