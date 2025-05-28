@@ -16,7 +16,7 @@ const RootLayout: FC = () => {
   function logoutAction() {
     dispatcher(logout());
   }
-
+ 
   if (authentication.token)
     return (
       <Fragment>
@@ -50,22 +50,6 @@ const RootLayout: FC = () => {
         </div>
       </Fragment>
     );
-  else return <FormDialog></FormDialog>;
-
-  /*
-    return <Fragment>
-      <div><b>Northwind Application</b></div>
-      <br />
-      <div>
-        <NavLink to="/home" end>Home</NavLink> |
-        <NavLink to="/login" end>Login</NavLink> |
-        <NavLink to="/product" end>Products</NavLink> |
-        <NavLink to="/customer" end>Customers</NavLink> |
-        <NavLink to="/order" end>Orders</NavLink> |<br></br>
-        <br />
-        <Outlet></Outlet>
-      </div>
-    </Fragment>
-    */
+  else return <FormDialog></FormDialog>; 
 };
 export default RootLayout;

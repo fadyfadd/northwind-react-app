@@ -9,33 +9,54 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { login } from "./store/authentication-slice";
+import { useRef } from "react";
+import { useLazyGetUserProfileQuery } from "./store/apis/user-api";
+import { UserProfileDto } from "./data-transfer-object/user-profile-dto";
+import { useNavigate } from "react-router-dom";
 
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-
   const dispatcher = useDispatch();
 
   var authentication = useSelector(
     (selector: RootState) => selector.authentication
   );
 
-  const loginAction = () => {
-        dispatcher(login({token:'xxxxx'}));
+  const [trigger, { data, error, isLoading }] = useLazyGetUserProfileQuery();
+  var navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (error) {
+      var _error = error as {
+        status: number;
+        data: { errorMessage: String; errorType: String };
+      };
+
+      if (_error.status === 400 && _error.data.errorMessage)
+        alert(_error.data.errorMessage);
+    }
+  }, [error]);
+
+  if (data) {
+    dispatcher(login(data as UserProfileDto));
+    console.log(data);
   }
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const loginAction = () => {
+    var userNameValue = userNameField.current?.value;
+    var passwordValue = passwordField.current?.value;
+
+    if (userNameValue && passwordValue)
+      trigger({ userName: userNameValue, password: passwordValue });
+      navigate("home");
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const userNameField = useRef<HTMLInputElement>(null);
+  const passwordField = useRef<HTMLInputElement>(null);
 
   return (
     <React.Fragment>
       <Dialog
         open={authentication.token == null}
-        onClose={handleClose}
         slotProps={{
           paper: {
             component: "form",
@@ -45,7 +66,6 @@ export default function FormDialog() {
               const formJson = Object.fromEntries((formData as any).entries());
               const email = formJson.email;
               console.log(email);
-              handleClose();
             },
           },
         }}
@@ -56,6 +76,7 @@ export default function FormDialog() {
             Please enter a valid Username and Password
           </DialogContentText>
           <TextField
+            inputRef={userNameField}
             autoFocus
             required
             margin="dense"
@@ -66,6 +87,7 @@ export default function FormDialog() {
             variant="standard"
           />
           <TextField
+            inputRef={passwordField}
             autoFocus
             required
             margin="dense"
@@ -77,8 +99,10 @@ export default function FormDialog() {
             variant="standard"
           />
         </DialogContent>
-        <DialogActions>          
-          <Button type="button" onClick={loginAction}>Login</Button>
+        <DialogActions>
+          <Button type="button" onClick={loginAction}>
+            Login
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
