@@ -1,0 +1,86 @@
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import { login } from "./store/authentication-slice";
+
+export default function FormDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const dispatcher = useDispatch();
+
+  var authentication = useSelector(
+    (selector: RootState) => selector.authentication
+  );
+
+  const loginAction = () => {
+        dispatcher(login({token:'xxxxx'}));
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <Dialog
+        open={authentication.token == null}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            component: "form",
+            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries((formData as any).entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          },
+        }}
+      >
+        <DialogTitle>Login Form</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter a valid Username and Password
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="userName"
+            name="userName"
+            label="User name"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="password"
+            name="password"
+            type="password"
+            label="Password"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>          
+          <Button type="button" onClick={loginAction}>Login</Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+}

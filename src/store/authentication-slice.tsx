@@ -1,23 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Role } from "../role";
+import { UserProfileDto } from "../data-transfer-object/user-profile-dto";
+ 
 
-export type UserSecurityProfile = {
-  isAuthenticated: boolean;
-  userName: string | null;
-  role: Role;
-  token: string | null;
-  refreshToken: string | null;
-  tokenExpirationDate: Date | null;
-};
-
-let initialState: UserSecurityProfile = {
-  isAuthenticated: false,
-  userName: null,
-  role: Role.Unknown,
-  refreshToken: null,
-  token: null,
-  tokenExpirationDate: null,
+let initialState: UserProfileDto = {
+ 
 };
 
 const authenticationSlice = createSlice({
@@ -25,20 +12,15 @@ const authenticationSlice = createSlice({
   initialState,
   reducers: {
     login: (
-      state: UserSecurityProfile,
-      action: PayloadAction<UserSecurityProfile>
+      state: UserProfileDto,
+      action: PayloadAction<UserProfileDto>
     ) => {
       return { ...action.payload };
     },
-    logout: (state: UserSecurityProfile) => {     
+    logout: (state: UserProfileDto) => {     
        
       return {
-        isAuthenticated: false,
-        userName: null,
-        role: Role.Unknown,
-        refreshToken: null,
-        token: null,
-        tokenExpirationDate: null,
+         
       };
     },
   },
