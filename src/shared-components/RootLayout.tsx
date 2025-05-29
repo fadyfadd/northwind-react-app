@@ -1,29 +1,34 @@
-import React, { FC, Fragment } from "react";
+import { FC, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, NavLink, Outlet } from "react-router-dom";
-import { RootState } from "./store/store";
+import { NavLink, Outlet } from "react-router-dom";
+import { RootState } from "../store/store";
 import FormDialog from "./login-form";
-import { logout } from "./store/authentication-slice";
+import { logout } from "../store/authentication-slice";
 import { Button } from "@mui/material";
 import ProgressScreen from "./progress-screen";
+import AppSnackBar from "./app-snack-bar";
 
 const RootLayout: FC = () => {
   var authentication = useSelector(
     (selector: RootState) => selector.authentication
   );
 
-  var dispatcher = useDispatch();
+  var dispatch = useDispatch();
 
   function logoutAction() {
-    dispatcher(logout());
+    dispatch(logout());
   }
 
-  var ui = useSelector((state:RootState)=>state.ui)
+  var ui = useSelector((state: RootState) => state.ui);
 
   if (authentication.token)
     return (
       <Fragment>
-        <ProgressScreen open={false}></ProgressScreen>
+        <AppSnackBar
+          message={ui.message.value}
+          type={ui.message.type}
+        ></AppSnackBar>
+        <ProgressScreen open={ui.isLoaderActive}></ProgressScreen>
         <div>
           <b>Northwind Application</b>
         </div>
@@ -57,6 +62,10 @@ const RootLayout: FC = () => {
   else
     return (
       <Fragment>
+        <AppSnackBar
+          message={ui.message.value}
+          type={ui.message.type}
+        ></AppSnackBar>
         <ProgressScreen open={ui.isLoaderActive}></ProgressScreen>
         <FormDialog></FormDialog>
       </Fragment>

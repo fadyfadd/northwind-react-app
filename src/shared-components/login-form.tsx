@@ -7,16 +7,19 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
-import { login } from "./store/authentication-slice";
+import { RootState } from "../store/store";
+import { login } from "../store/authentication-slice";
 import { useRef } from "react";
-import { useLazyGetUserProfileQuery } from "./store/apis/user-api";
-import { UserProfileDto } from "./data-transfer-object/user-profile-dto";
+import { useLazyGetUserProfileQuery } from "../store/apis/user-api";
+import { UserProfileDto } from "../data-transfer-object/user-profile-dto";
 import { useNavigate } from "react-router-dom";
-import { handleProgressIndicator } from "./store/ui-slice";
+import {
+  handleApplicationWideMessage,
+  handleProgressIndicator,
+} from "../store/ui-slice";
 
 export default function FormDialog() {
-  const dispatcher = useDispatch();
+  const dispatch = useDispatch();
 
   var authentication = useSelector(
     (selector: RootState) => selector.authentication
@@ -24,8 +27,6 @@ export default function FormDialog() {
 
   const [trigger, { data, error, isFetching }] = useLazyGetUserProfileQuery();
   var navigate = useNavigate();
-
-  const dispatch = useDispatch();
 
   if (isFetching) {
     dispatch(handleProgressIndicator(true));
@@ -37,16 +38,22 @@ export default function FormDialog() {
     if (error) {
       var _error = error as {
         status: number;
-        data: { errorMessage: String; errorType: String };
+        data: { errorMessage: string; errorType: string };
       };
 
-      if (_error.status === 400 && _error.data.errorMessage)
-        alert(_error.data.errorMessage);
+      if (_error.status === 400 && _error.data.errorMessage)        
+        dispatch(
+          handleApplicationWideMessage({
+            value: _error.data.errorMessage,
+            type: "error",
+          })
+        );
     }
   }, [error]);
 
   if (data) {
-    dispatcher(login(data as UserProfileDto));
+    dispatch(handleProgressIndicator(false));
+    dispatch(login(data as UserProfileDto));
     navigate("home");
   }
 
@@ -56,7 +63,6 @@ export default function FormDialog() {
 
     if (userNameValue && passwordValue) {
       trigger({ userName: userNameValue, password: passwordValue });
-     
     }
   };
 

@@ -3,12 +3,15 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type ScreenState = {
   isLoaderActive: boolean;
-  message: string | null;
+  message: {
+    value: string | null;
+    type: "error" | "info" | "success" | "warning";
+  };
 };
 
 const initialState: ScreenState = {
   isLoaderActive: false,
-  message: null,
+  message: { value: null, type: "warning" },
 };
 
 const uiSlice = createSlice({
@@ -23,13 +26,17 @@ const uiSlice = createSlice({
     },
     handleApplicationWideMessage(
       state: ScreenState,
-      action: PayloadAction<string | null>
+      action: PayloadAction<{
+        value: string | null;
+        type: "error" | "info" | "success" | "warning";
+      }>
     ) {
       state.message = action.payload;
     },
   },
 });
 
-export const { handleProgressIndicator , handleApplicationWideMessage } = uiSlice.actions;
+export const { handleProgressIndicator, handleApplicationWideMessage } =
+  uiSlice.actions;
 
 export default uiSlice.reducer;

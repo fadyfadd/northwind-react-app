@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import RootLayout from "./RootLayout";
+import RootLayout from "./shared-components/RootLayout";
 import ProductDashboard from "./product-module/product-dashboard";
 import CustomerDashboard from "./customer-module/customer-dashboard";
 import OrderDashboard from "./order-module/order-dashboard";
