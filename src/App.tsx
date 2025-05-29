@@ -5,11 +5,10 @@ import RootLayout from "./RootLayout";
 import ProductDashboard from "./product-module/product-dashboard";
 import CustomerDashboard from "./customer-module/customer-dashboard";
 import OrderDashboard from "./order-module/order-dashboard";
-import { Provider } from "react-redux";
+import { Provider} from "react-redux";
 import { store } from "./store/store";
- 
 import { HomePage } from "./home";
-
+ 
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -24,6 +23,8 @@ const routes = createBrowserRouter([
 ]);
 
 function App() {
+
+
   return (
     <Provider store={store}>
       <RouterProvider router={routes} />

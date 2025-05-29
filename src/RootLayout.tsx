@@ -5,6 +5,7 @@ import { RootState } from "./store/store";
 import FormDialog from "./login-form";
 import { logout } from "./store/authentication-slice";
 import { Button } from "@mui/material";
+import ProgressScreen from "./progress-screen";
 
 const RootLayout: FC = () => {
   var authentication = useSelector(
@@ -16,10 +17,13 @@ const RootLayout: FC = () => {
   function logoutAction() {
     dispatcher(logout());
   }
- 
+
+  var ui = useSelector((state:RootState)=>state.ui)
+
   if (authentication.token)
     return (
       <Fragment>
+        <ProgressScreen open={false}></ProgressScreen>
         <div>
           <b>Northwind Application</b>
         </div>
@@ -50,6 +54,12 @@ const RootLayout: FC = () => {
         </div>
       </Fragment>
     );
-  else return <FormDialog></FormDialog>; 
+  else
+    return (
+      <Fragment>
+        <ProgressScreen open={ui.isLoaderActive}></ProgressScreen>
+        <FormDialog></FormDialog>
+      </Fragment>
+    );
 };
 export default RootLayout;

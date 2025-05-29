@@ -13,6 +13,7 @@ import { useRef } from "react";
 import { useLazyGetUserProfileQuery } from "./store/apis/user-api";
 import { UserProfileDto } from "./data-transfer-object/user-profile-dto";
 import { useNavigate } from "react-router-dom";
+import { handleProgressIndicator } from "./store/ui-slice";
 
 export default function FormDialog() {
   const dispatcher = useDispatch();
@@ -21,8 +22,16 @@ export default function FormDialog() {
     (selector: RootState) => selector.authentication
   );
 
-  const [trigger, { data, error, isLoading }] = useLazyGetUserProfileQuery();
+  const [trigger, { data, error, isFetching }] = useLazyGetUserProfileQuery();
   var navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  if (isFetching) {
+    dispatch(handleProgressIndicator(true));
+  } else {
+    dispatch(handleProgressIndicator(false));
+  }
 
   React.useEffect(() => {
     if (error) {
@@ -38,16 +47,17 @@ export default function FormDialog() {
 
   if (data) {
     dispatcher(login(data as UserProfileDto));
-    console.log(data);
+    navigate("home");
   }
 
   const loginAction = () => {
     var userNameValue = userNameField.current?.value;
     var passwordValue = passwordField.current?.value;
 
-    if (userNameValue && passwordValue)
+    if (userNameValue && passwordValue) {
       trigger({ userName: userNameValue, password: passwordValue });
-      navigate("home");
+     
+    }
   };
 
   const userNameField = useRef<HTMLInputElement>(null);
