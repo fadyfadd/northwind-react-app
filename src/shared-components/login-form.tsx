@@ -28,11 +28,13 @@ export default function FormDialog() {
   const [trigger, { data, error, isFetching }] = useLazyGetUserProfileQuery();
   var navigate = useNavigate();
 
-  if (isFetching) {
-    dispatch(handleProgressIndicator(true));
-  } else {
-    dispatch(handleProgressIndicator(false));
-  }
+  React.useEffect(() => {
+    if (isFetching) {
+      dispatch(handleProgressIndicator(true));
+    } else {
+      dispatch(handleProgressIndicator(false));
+    }
+  }, [dispatch, isFetching]);
 
   React.useEffect(() => {
     if (error) {
@@ -41,7 +43,7 @@ export default function FormDialog() {
         data: { errorMessage: string; errorType: string };
       };
 
-      if (_error.status === 400 && _error.data.errorMessage)        
+      if (_error.status === 400 && _error.data.errorMessage)
         dispatch(
           handleApplicationWideMessage({
             value: _error.data.errorMessage,
@@ -49,13 +51,15 @@ export default function FormDialog() {
           })
         );
     }
-  }, [error]);
+  }, [dispatch, error]);
 
-  if (data) {
-    dispatch(handleProgressIndicator(false));
-    dispatch(login(data as UserProfileDto));
-    navigate("home");
-  }
+  React.useEffect(() => {
+    if (data) {
+      dispatch(handleProgressIndicator(false));
+      dispatch(login(data as UserProfileDto));
+      navigate("home");
+    }
+  }, [data, dispatch, navigate]);
 
   const loginAction = () => {
     var userNameValue = userNameField.current?.value;
