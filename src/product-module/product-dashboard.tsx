@@ -7,14 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 const ProductDashboard: FC = () => {
   const { data, error, isFetching } = useGetProductsQuery();
 
-  const dispatcher = useDispatch()
+  const dispatch = useDispatch()
   
   if (isFetching) {
-    dispatcher(handleProgressIndicator(true))
+    dispatch(handleProgressIndicator(true))
      
   }
   else {
-     dispatcher(handleProgressIndicator(false))
+     dispatch(handleProgressIndicator(false))
  
   }
 

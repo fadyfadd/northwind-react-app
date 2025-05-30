@@ -22,7 +22,7 @@ import { NorthWindWebApiError } from "./northwind-web-api-error";
 export default function FormDialog() {
   const dispatch = useDispatch();
 
-  var authentication = useSelector(
+  var authSelector = useSelector(
     (selector: RootState) => selector.authentication
   );
 
@@ -70,7 +70,7 @@ export default function FormDialog() {
   return (
     <React.Fragment>
       <Dialog
-        open={authentication.token == null}
+        open={authSelector.token == null}
         slotProps={{
           paper: {
             component: "form",

@@ -9,7 +9,7 @@ import ProgressScreen from "./progress-screen";
 import AppSnackBar from "./app-snack-bar";
 
 const RootLayout: FC = () => {
-  var authentication = useSelector(
+  var authSelector = useSelector(
     (selector: RootState) => selector.authentication
   );
 
@@ -19,16 +19,16 @@ const RootLayout: FC = () => {
     dispatch(logout());
   }
 
-  var ui = useSelector((state: RootState) => state.ui);
+  var uiSelector = useSelector((state: RootState) => state.ui);
 
-  if (authentication.token)
+  if (authSelector.token)
     return (
       <Fragment>
         <AppSnackBar
-          message={ui.message.value}
-          type={ui.message.type}
+          message={uiSelector.message.value}
+          type={uiSelector.message.type}
         ></AppSnackBar>
-        <ProgressScreen open={ui.isLoaderActive}></ProgressScreen>
+        <ProgressScreen open={uiSelector.isLoaderActive}></ProgressScreen>
         <div>
           <b>Northwind Application</b>
         </div>
@@ -63,10 +63,10 @@ const RootLayout: FC = () => {
     return (
       <Fragment>
         <AppSnackBar
-          message={ui.message.value}
-          type={ui.message.type}
+          message={uiSelector.message.value}
+          type={uiSelector.message.type}
         ></AppSnackBar>
-        <ProgressScreen open={ui.isLoaderActive}></ProgressScreen>
+        <ProgressScreen open={uiSelector.isLoaderActive}></ProgressScreen>
         <FormDialog></FormDialog>
       </Fragment>
     );
