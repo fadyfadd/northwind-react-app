@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { handleProgressIndicator } from "../store/ui-slice";
 
 const ProductDashboard: FC = () => {
-  const { data, error, isFetching } = useGetProductsQuery();
+  const { data, isFetching } = useGetProductsQuery();
 
   const dispatch = useDispatch();
 
