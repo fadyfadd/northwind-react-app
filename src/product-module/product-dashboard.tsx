@@ -1,25 +1,19 @@
-import { FC, useEffect } from "react";
-import { useGetProductsQuery } from "../store/apis/product-api";
-import ProductList from "./product-list";
-import { useDispatch } from "react-redux";
-import { handleProgressIndicator } from "../store/ui-slice";
+import { FC, Fragment, useEffect } from "react";
+import { Button } from "@mui/material";
+import { NavLink, Outlet } from "react-router-dom";
 
 const ProductDashboard: FC = () => {
-  const { data, isFetching } = useGetProductsQuery();
+ 
+  return (    
+    <Fragment> 
+          <NavLink to="all" end>
+            <Button>List Of Products</Button>
+          </NavLink> 
+          <br></br>
+          <br />
+          <Outlet></Outlet>
+    </Fragment>
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (isFetching) {
-   
-      dispatch(handleProgressIndicator(true));
-    } else {
-     
-      dispatch(handleProgressIndicator(false));
-    }
-  }, [dispatch, isFetching]);
-
-  if (data) return <ProductList products={data}></ProductList>;
-  return <span>No Data Found</span>;
+         );
 };
 export default ProductDashboard;
