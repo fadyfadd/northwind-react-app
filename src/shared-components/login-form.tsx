@@ -19,7 +19,7 @@ import {
 } from "../store/ui-slice";
 import { NorthWindWebApiError } from "./northwind-web-api-error";
 
-export default function FormDialog() {
+export default function LoginScreen() {
   const dispatch = useDispatch();
 
   var authSelector = useSelector(
@@ -69,20 +69,8 @@ export default function FormDialog() {
 
   return (
     <React.Fragment>
-      <Dialog
+      <Dialog 
         open={authSelector.token == null}
-        slotProps={{
-          paper: {
-            component: "form",
-            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-              event.preventDefault();
-              const formData = new FormData(event.currentTarget);
-              const formJson = Object.fromEntries((formData as any).entries());
-              const email = formJson.email;
-              console.log(email);
-            },
-          },
-        }}
       >
         <DialogTitle>Login Form</DialogTitle>
         <DialogContent>

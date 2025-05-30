@@ -2,7 +2,7 @@ import { FC, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Outlet } from "react-router-dom";
 import { RootState } from "../store/store";
-import FormDialog from "./login-form";
+import LoginScreen from "./login-form";
 import { logout } from "../store/authentication-slice";
 import { Button } from "@mui/material";
 import ProgressScreen from "./progress-screen";
@@ -67,7 +67,7 @@ const RootLayout: FC = () => {
           type={uiSelector.message.type}
         ></AppSnackBar>
         <ProgressScreen open={uiSelector.isLoaderActive}></ProgressScreen>
-        <FormDialog></FormDialog>
+        <LoginScreen></LoginScreen>
       </Fragment>
     );
 };
