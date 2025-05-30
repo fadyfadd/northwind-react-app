@@ -1,22 +1,23 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useGetProductsQuery } from "../store/apis/product-api";
 import ProductList from "./product-list";
-import { useDispatch, useSelector } from "react-redux";
- import { handleProgressIndicator } from "../store/ui-slice";
+import { useDispatch } from "react-redux";
+import { handleProgressIndicator } from "../store/ui-slice";
 
 const ProductDashboard: FC = () => {
   const { data, error, isFetching } = useGetProductsQuery();
 
-  const dispatch = useDispatch()
-  
-  if (isFetching) {
-    dispatch(handleProgressIndicator(true))
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isFetching) {
+   
+      dispatch(handleProgressIndicator(true));
+    } else {
      
-  }
-  else {
-     dispatch(handleProgressIndicator(false))
- 
-  }
+      dispatch(handleProgressIndicator(false));
+    }
+  }, [dispatch, isFetching]);
 
   if (data) return <ProductList products={data}></ProductList>;
   return <span>No Data Found</span>;

@@ -18,6 +18,7 @@ import {
   handleProgressIndicator,
 } from "../store/ui-slice";
 import { NorthWindWebApiError } from "./northwind-web-api-error";
+import { Box, Container, Typography } from "@mui/material";
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
@@ -69,43 +70,35 @@ export default function LoginScreen() {
 
   return (
     <React.Fragment>
-      <Dialog 
-        open={authSelector.token == null}
-      >
-        <DialogTitle>Login Form</DialogTitle>
+      <Dialog open={authSelector.token == null}>
+     
         <DialogContent>
-          <DialogContentText>
-            Please enter a valid Username and Password
-          </DialogContentText>
-          <TextField
-            inputRef={userNameField}
-            autoFocus
-            required
-            margin="dense"
-            id="userName"
-            name="userName"
-            label="User name"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            inputRef={passwordField}
-            autoFocus
-            required
-            margin="dense"
-            id="password"
-            name="password"
-            type="password"
-            label="Password"
-            fullWidth
-            variant="standard"
-          />
+          <Container maxWidth="xs">
+            <Box
+              sx={{             
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h5">Sign In</Typography>
+              <Box component="form" sx={{ mt: 2 }}>
+                <TextField fullWidth   inputRef={userNameField} label="Username" margin="normal" required />
+                <TextField   inputRef={passwordField}
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  margin="normal"
+                  required
+                />
+                <Button onClick={loginAction} fullWidth variant="contained" sx={{ mt: 2 }}>
+                  Login
+                </Button>
+              </Box>
+            </Box>
+          </Container>
         </DialogContent>
-        <DialogActions>
-          <Button type="button" onClick={loginAction}>
-            Login
-          </Button>
-        </DialogActions>
+    
       </Dialog>
     </React.Fragment>
   );
