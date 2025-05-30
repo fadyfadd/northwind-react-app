@@ -17,6 +17,7 @@ import {
   handleApplicationWideMessage,
   handleProgressIndicator,
 } from "../store/ui-slice";
+import { NorthWindWebApiError } from "./northwind-web-api-error";
 
 export default function FormDialog() {
   const dispatch = useDispatch();
@@ -29,19 +30,12 @@ export default function FormDialog() {
   var navigate = useNavigate();
 
   React.useEffect(() => {
-    if (isFetching) {
-      dispatch(handleProgressIndicator(true));
-    } else {
-      dispatch(handleProgressIndicator(false));
-    }
+    dispatch(handleProgressIndicator(isFetching));
   }, [dispatch, isFetching]);
 
   React.useEffect(() => {
     if (error) {
-      var _error = error as {
-        status: number;
-        data: { errorMessage: string; errorType: string };
-      };
+      var _error = error as NorthWindWebApiError;
 
       if (_error.status === 400 && _error.data.errorMessage)
         dispatch(
