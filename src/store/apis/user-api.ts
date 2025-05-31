@@ -3,7 +3,7 @@ import { UserProfileDto } from "../../data-transfer-object/user-profile-dto";
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5251" }),
+  baseQuery: fetchBaseQuery({ baseUrl:process.env.REACT_APP_API_NORTHWIND_API }),
   endpoints: (builder) => ({
     getUserProfile: builder.query<
       UserProfileDto,

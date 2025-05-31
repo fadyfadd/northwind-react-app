@@ -3,7 +3,7 @@ import { ProductDto } from "../../data-transfer-object/product-dto";
 
 export const productApi = createApi({
   reducerPath: "productApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5251" }),
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_NORTHWIND_API }),
   endpoints: (builder) => ({    
     getProducts: builder.query<ProductDto[] , void>({query:()=>`Product/All`}),
     getProductByid: builder.query<ProductDto, number>({
