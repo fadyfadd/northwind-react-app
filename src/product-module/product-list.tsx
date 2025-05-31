@@ -3,46 +3,52 @@ import { ProductDto } from "../data-transfer-object/product-dto";
 import { useGetProductsQuery } from "../store/apis/product-api";
 import { useDispatch } from "react-redux";
 import { handleProgressIndicator } from "../store/ui-slice";
+import { DataGrid } from "@mui/x-data-grid/DataGrid";
+import { SupplierDto } from "../data-transfer-object/supplier-dto";
+import { GridToolbar } from "@mui/x-data-grid";
+ 
 
 const ProductList: FC = () => {
-  const { data, isFetching} = useGetProductsQuery();
+  const { data, isFetching } = useGetProductsQuery();
+
+  const columns = [
+    { field: "productId", headerName: "Product Id", width: 140 },
+    { field: "productName", headerName: "Product Name", width: 200 },
+    {
+      field: "supplier",
+      headerName: "supplier Name",
+      width: 200,
+      valueGetter: (supplier: SupplierDto, product: ProductDto) =>
+        supplier.contactName,
+    },
+    {
+      field: "unitPrice",
+      headerName: "Unit Price",
+      width: 140,
+      valueGetter: (param: any) => Math.round(param),
+    },
+    { field: "unitsInStock", headerName: "Unit in Cost", width: 140 },
+    {field:'discontinued' , headerName:"Discontinued" , width:140 , valueGetter: (param:any)=>param == 1 ? true : false}
+  ];
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isFetching) {
-      dispatch(handleProgressIndicator(true));
-    } else {
-      dispatch(handleProgressIndicator(false));
-    }
+    dispatch(handleProgressIndicator(isFetching));
   }, [dispatch, isFetching]);
 
-  let productList: any;
-  if (data) {
-    productList = data.map((product: ProductDto) => (
-      <tr key={product.productId}>
-        <td>{product.productId}</td>
-        <td>{product.productName}</td>
-        <td>{product.unitPrice}</td>
-        <td>{product.unitsInStock}</td>
-        <td>{product.discontinued}</td>
-      </tr>
-    ));
-  }
-
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Product Id</th>
-          <th>Product Name</th>
-          <th>Unit Price</th>
-          <th>Unit in Stock</th>
-          <th>Is Discontinued</th>
-        </tr>
-      </thead>
-      <tbody>{productList}</tbody>
-    </table>
+    <DataGrid
+      showToolbar
+      columns={columns}
+      pagination
+      pageSizeOptions={[5, 10]}
+      rows={data}
+      initialState={{
+        pagination: { paginationModel: { pageSize: 5, page: 0 } },
+      }}
+      getRowId={(row: ProductDto) => row.productId}
+    ></DataGrid>
   );
 };
 

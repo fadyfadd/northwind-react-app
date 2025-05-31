@@ -1,3 +1,5 @@
+import { SupplierDto } from "./supplier-dto";
+
 export type ProductDto = {
   productId: number;
   productName: string;
@@ -9,5 +11,5 @@ export type ProductDto = {
   reorderLevel: number;
   discontinued: false; 
   unitPrice: number;
-
+  supplier: SupplierDto;
 };
