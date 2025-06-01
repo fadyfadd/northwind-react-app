@@ -8,6 +8,7 @@ import { SupplierDto } from "../data-transfer-object/supplier-dto";
 import { Button } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
 import ConfirmationDialog from "../shared-components/confirmation-dialog";
+import AddEditDialog from "./add-edit-dialog";
 
 const ProductList: FC = () => {
   const { data, isFetching } = useGetProductsQuery();
@@ -73,6 +74,10 @@ const ProductList: FC = () => {
 
   const dispatch = useDispatch();
 
+  function onClose() {}
+
+  function onsubmit(productDto: ProductDto) {}
+
   useEffect(() => {
     dispatch(handleProgressIndicator(isFetching));
   }, [dispatch, isFetching]);
@@ -89,6 +94,12 @@ const ProductList: FC = () => {
 
   return (
     <>
+      <AddEditDialog
+        open={false}
+        onClose={onClose}
+        onSubmit={onsubmit}
+        initialData={{ }}
+      ></AddEditDialog>
       <ConfirmationDialog
         open={isOpen}
         message="Are you sure you want to proceed"
@@ -104,7 +115,7 @@ const ProductList: FC = () => {
         initialState={{
           pagination: { paginationModel: { pageSize: 5, page: 0 } },
         }}
-        getRowId={(row: ProductDto) => row.productId}
+        getRowId={(row: ProductDto) => ('productId' in row) ? row.productId ?? -1 : -1}
       ></DataGrid>
     </>
   );
