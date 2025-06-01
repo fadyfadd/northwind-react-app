@@ -14,10 +14,12 @@ const ProductList: FC = () => {
   const { data, isFetching } = useGetProductsQuery();
 
   function onDeleteRequest(productId: number) {
-    setIsOpen(true);
+    setIsConfirmationOpen(true);
   }
 
-  function onEdit(productId: number) {}
+  function onEdit(productId: number) {
+    setIsAddEditOpen(true);
+  }
 
   const columns: GridColDef[] = [
     { field: "productId", headerName: "Product Id", width: 140 },
@@ -74,34 +76,39 @@ const ProductList: FC = () => {
 
   const dispatch = useDispatch();
 
-  function onClose() {}
+  function onAddEditClose() {
+    setIsAddEditOpen(false);
+  }
 
-  function onsubmit(productDto: ProductDto) {}
+  function onSubmit(productDto: ProductDto) {
+    setIsAddEditOpen(false);
+  }
 
   useEffect(() => {
     dispatch(handleProgressIndicator(isFetching));
   }, [dispatch, isFetching]);
 
   function onConfirm() {
-    setIsOpen(false);
+    setIsConfirmationOpen(false);
   }
 
   function onReject(event: any) {
-    setIsOpen(false);
+    setIsConfirmationOpen(false);
   }
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
+  const [isAddEditOpen, setIsAddEditOpen] = useState<boolean>(false);
 
   return (
     <>
       <AddEditDialog
-        open={false}
-        onClose={onClose}
-        onSubmit={onsubmit}
-        initialData={{ }}
+        open={isAddEditOpen}
+        onClose={onAddEditClose}
+        onSubmit={onSubmit}
+        initialData={{}}
       ></AddEditDialog>
       <ConfirmationDialog
-        open={isOpen}
+        open={isConfirmationOpen}
         message="Are you sure you want to proceed"
         onClose={onReject}
         onConfirm={onConfirm}
@@ -115,7 +122,9 @@ const ProductList: FC = () => {
         initialState={{
           pagination: { paginationModel: { pageSize: 5, page: 0 } },
         }}
-        getRowId={(row: ProductDto) => ('productId' in row) ? row.productId ?? -1 : -1}
+        getRowId={(row: ProductDto) =>
+          "productId" in row ? row.productId ?? -1 : -1
+        }
       ></DataGrid>
     </>
   );

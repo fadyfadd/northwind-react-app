@@ -27,7 +27,7 @@ const AddEditDialog: FC<{
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>{initialData ? "Edit Item" : "Add Item"}</DialogTitle>
       <DialogContent>
         <TextField
