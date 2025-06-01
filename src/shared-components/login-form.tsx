@@ -2,8 +2,8 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
- import DialogContent from "@mui/material/DialogContent";
- import { useDispatch, useSelector } from "react-redux";
+import DialogContent from "@mui/material/DialogContent";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { login } from "../store/authentication-slice";
 import { useRef } from "react";
@@ -17,7 +17,7 @@ import {
 import { NorthWindWebApiError } from "./northwind-web-api-error";
 import { Box, Container, Typography } from "@mui/material";
 
-export default function LoginScreen() {
+const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
 
   var authSelector = useSelector(
@@ -53,7 +53,7 @@ export default function LoginScreen() {
     }
   }, [data, dispatch, navigate]);
 
-  const loginAction = () => {
+  const onLogin = () => {
     var userNameValue = userNameField.current?.value;
     var passwordValue = passwordField.current?.value;
 
@@ -68,11 +68,10 @@ export default function LoginScreen() {
   return (
     <React.Fragment>
       <Dialog open={authSelector.token == null}>
-     
         <DialogContent>
           <Container maxWidth="xs">
             <Box
-              sx={{             
+              sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -80,23 +79,36 @@ export default function LoginScreen() {
             >
               <Typography variant="h5">Sign In</Typography>
               <Box component="form" sx={{ mt: 2 }}>
-                <TextField fullWidth   inputRef={userNameField} label="Username" margin="normal" required />
-                <TextField   inputRef={passwordField}
+                <TextField
+                  fullWidth
+                  inputRef={userNameField}
+                  label="Username"
+                  margin="normal"
+                  required
+                />
+                <TextField
+                  inputRef={passwordField}
                   fullWidth
                   label="Password"
                   type="password"
                   margin="normal"
                   required
                 />
-                <Button onClick={loginAction} fullWidth variant="contained" sx={{ mt: 2 }}>
+                <Button
+                  onClick={onLogin}
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 2 }}
+                >
                   Login
                 </Button>
               </Box>
             </Box>
           </Container>
         </DialogContent>
-    
       </Dialog>
     </React.Fragment>
   );
-}
+};
+
+export default LoginScreen;
