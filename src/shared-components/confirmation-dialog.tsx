@@ -11,9 +11,10 @@ import {
 const ConfirmationDialog: React.FC<{
   message: string;
   open: boolean;
-  onClose: () => void;
+  onClose: (event: any) => void;
   onConfirm: () => void;
 }> = ({ open, onClose, onConfirm, message }) => {
+  console.log(open);
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Confirm Action</DialogTitle>

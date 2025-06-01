@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { ProductDto } from "../data-transfer-object/product-dto";
 import { useGetProductsQuery } from "../store/apis/product-api";
 import { useDispatch } from "react-redux";
@@ -7,17 +7,16 @@ import { DataGrid } from "@mui/x-data-grid/DataGrid";
 import { SupplierDto } from "../data-transfer-object/supplier-dto";
 import { Button } from "@mui/material";
 import { GridColDef } from "@mui/x-data-grid";
+import ConfirmationDialog from "../shared-components/confirmation-dialog";
 
 const ProductList: FC = () => {
   const { data, isFetching } = useGetProductsQuery();
 
-  function onRemove(productId: number) {
-    console.log(productId);
+  function onDeleteRequest(productId: number) {
+    setIsOpen(true);
   }
 
-  function onEdit(productId: number) {
-    console.log(productId);
-  }
+  function onEdit(productId: number) {}
 
   const columns: GridColDef[] = [
     { field: "productId", headerName: "Product Id", width: 140 },
@@ -51,10 +50,24 @@ const ProductList: FC = () => {
       headerAlign: "center",
       renderCell: (param: any) => (
         <Fragment>
-          <Button onClick={()=>{onRemove(param.row.productId)}} color="primary">Edit</Button>
-          <Button onClick={()=>{onEdit(param.row.productId)}} color="error">DELETE</Button>
+          <Button
+            onClick={() => {
+              onEdit(param.row.productId);
+            }}
+            color="primary"
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={() => {
+              onDeleteRequest(param.row.productId);
+            }}
+            color="error"
+          >
+            DELETE
+          </Button>
         </Fragment>
-  ),
+      ),
     },
   ];
 
@@ -64,18 +77,36 @@ const ProductList: FC = () => {
     dispatch(handleProgressIndicator(isFetching));
   }, [dispatch, isFetching]);
 
+  function onConfirm() {
+    setIsOpen(false);
+  }
+
+  function onReject(event: any) {
+    setIsOpen(false);
+  }
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
-    <DataGrid
-      showToolbar
-      columns={columns}
-      pagination
-      pageSizeOptions={[5, 10]}
-      rows={data}
-      initialState={{
-        pagination: { paginationModel: { pageSize: 5, page: 0 } },
-      }}
-      getRowId={(row: ProductDto) => row.productId}
-    ></DataGrid>
+    <>
+      <ConfirmationDialog
+        open={isOpen}
+        message="Are you sure you want to proceed"
+        onClose={onReject}
+        onConfirm={onConfirm}
+      ></ConfirmationDialog>
+      <DataGrid
+        showToolbar
+        columns={columns}
+        pagination
+        pageSizeOptions={[5, 10]}
+        rows={data}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5, page: 0 } },
+        }}
+        getRowId={(row: ProductDto) => row.productId}
+      ></DataGrid>
+    </>
   );
 };
 
