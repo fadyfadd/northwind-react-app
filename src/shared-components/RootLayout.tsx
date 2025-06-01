@@ -23,41 +23,43 @@ const RootLayout: FC = () => {
 
   if (authSelector.token)
     return (
-      <Fragment>
-        <AppSnackBar
-          message={uiSelector.message.value}
-          type={uiSelector.message.type}
-        ></AppSnackBar>
-        <ProgressScreen open={uiSelector.isLoaderActive}></ProgressScreen>
-        <div>
-          <b>Northwind Application</b>
-        </div>
-        <br />
-        <div>
-          <NavLink to="/#" end onClick={logoutAction}>
-            <Button>Logout</Button>
-          </NavLink>
-          |
-          <NavLink to="/home" end>
-            <Button>Home</Button>
-          </NavLink>
-          |
-          <NavLink to="/product" end>
-            <Button>Product</Button>
-          </NavLink>
-          |
-          <NavLink to="/customer" end>
-            <Button>Customer</Button>
-          </NavLink>
-          |
-          <NavLink to="/order" end>
-            <Button>Order</Button>
-          </NavLink>
-          |<br></br>
+      <div style={{margin:'10px'}}>
+        <Fragment>
+          <AppSnackBar
+            message={uiSelector.message.value}
+            type={uiSelector.message.type}
+          ></AppSnackBar>
+          <ProgressScreen open={uiSelector.isLoaderActive}></ProgressScreen>
+          <div>
+            <b>Northwind Application</b>
+          </div>
           <br />
-          <Outlet></Outlet>
-        </div>
-      </Fragment>
+          <div>
+            <NavLink to="/#" end onClick={logoutAction}>
+              <Button>Logout</Button>
+            </NavLink>
+            |
+            <NavLink to="/home" end>
+              <Button>Home</Button>
+            </NavLink>
+            |
+            <NavLink to="/product" end>
+              <Button>Product</Button>
+            </NavLink>
+            |
+            <NavLink to="/customer" end>
+              <Button>Customer</Button>
+            </NavLink>
+            |
+            <NavLink to="/order" end>
+              <Button>Order</Button>
+            </NavLink>
+            |<br></br>
+            <br />
+            <Outlet></Outlet>
+          </div>
+        </Fragment>
+      </div>
     );
   else
     return (

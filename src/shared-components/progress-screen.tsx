@@ -8,7 +8,7 @@ const ProgressScreen: FC<{ open: boolean }> = ({ open }) => {
     <div>
  
       <Backdrop  
-        sx={(theme) => ({ zIndex: 10000 ,  backgroundColor: "rgba(255, 255, 255, 0.2)"})}
+        sx={(theme) => ({ zIndex: 100000 ,  backgroundColor: "rgba(255, 255, 255, 0.2)"})}
         open={open}  
       >
         <CircularProgress color="success" />

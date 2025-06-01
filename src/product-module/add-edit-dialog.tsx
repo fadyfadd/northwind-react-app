@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -13,12 +13,12 @@ const AddEditDialog: FC<{
   open: boolean;
   onClose: () => void;
   onSubmit: (event: ProductDto) => void;
-  initialData: ProductDto | {};
-}> = ({ open, onClose, onSubmit, initialData }) => {
-  const [formData, setFormData] = useState<ProductDto | {}>(initialData);
+  productId: number | null;
+}> = ({ open, onClose, onSubmit, productId }) => {
+  const [formData, setFormData] = useState<ProductDto | {}>({});
 
   const handleChange = (e: any) => {
-    setFormData({ ...formData });
+    setFormData({ ...formData, [e.target.Name]: e.target.Value });
   };
 
   const handleSubmit = () => {
@@ -28,11 +28,11 @@ const AddEditDialog: FC<{
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>{initialData ? "Edit Item" : "Add Item"}</DialogTitle>
+      <DialogTitle>{productId == null ? "Insert" : "Update"}</DialogTitle>
       <DialogContent>
         <TextField
-          label="Name"
-          name="name"
+          label="Product name"
+          name="productName"
           value={"productName" in formData ? formData.productName : ""}
           onChange={handleChange}
           fullWidth

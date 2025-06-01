@@ -17,7 +17,10 @@ const ProductList: FC = () => {
     setIsConfirmationOpen(true);
   }
 
+  const [productId, setProductId] = useState<number | null>(null);
+
   function onEdit(productId: number) {
+    setProductId(productId);
     setIsAddEditOpen(true);
   }
 
@@ -96,16 +99,30 @@ const ProductList: FC = () => {
     setIsConfirmationOpen(false);
   }
 
+  function onAddNewProduct() {
+    setProductId(null);
+    setIsAddEditOpen(true);
+  }
+
   const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
   const [isAddEditOpen, setIsAddEditOpen] = useState<boolean>(false);
 
   return (
     <>
+      <Button
+        sx={{ mb: 2 }}
+        variant="outlined"
+        color="success"
+        onClick={onAddNewProduct}
+      >
+        Insert
+      </Button>
+
       <AddEditDialog
         open={isAddEditOpen}
         onClose={onAddEditClose}
         onSubmit={onSubmit}
-        initialData={{}}
+        productId={productId}
       ></AddEditDialog>
       <ConfirmationDialog
         open={isConfirmationOpen}
