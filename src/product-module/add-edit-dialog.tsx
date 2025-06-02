@@ -114,7 +114,7 @@ const AddEditDialog: FC<{
       return;
     }
 
-    if (!("discontinued" in formData) ||  (formData.discontinued !== 0 &&  formData.discontinued !== 1)  ) {
+    if (!("discontinued" in formData) ||  (formData.discontinued != 0 &&  formData.discontinued != 1)  ) {
       dispatch(
         handleApplicationWideMessage({
           value: "Discontinued can only be 1 or 0",
