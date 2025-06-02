@@ -19,7 +19,6 @@ const AddEditDialog: FC<{
   productId: number | null;
 }> = ({ open, onClose, onSubmit, productId }) => {
   const [formData, setFormData] = useState<ProductDto | {}>({});
-  console.log(formData);
   const handleChange = (e: any) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
