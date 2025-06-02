@@ -7,9 +7,9 @@ export type ProductDto = {
   categoryId?: number;
   quantityPerUnit?: string;
   unitsInStock?: number;
-  unitInOrder?: number;
+  unitsOnOrder?: number;
   reorderLevel?: number;
-  discontinued?: false; 
+  discontinued?: number; 
   unitPrice?: number;
   supplier?: SupplierDto;
 };

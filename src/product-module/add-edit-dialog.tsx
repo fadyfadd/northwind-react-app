@@ -11,6 +11,14 @@ import {
 } from "@mui/material";
 import { ProductDto } from "../data-transfer-object/product-dto";
 import { useGetProductByidQuery } from "../store/apis/product-api";
+import { useGetSuppliersQuery } from "../store/apis/supplier-apis";
+import { SupplierDto } from "../data-transfer-object/supplier-dto";
+import {
+  handleApplicationWideMessage,
+  handleProgressIndicator,
+} from "../store/ui-slice";
+import { useDispatch } from "react-redux";
+import { utilities } from "../shared-components/utilties";
 
 const AddEditDialog: FC<{
   open: boolean;
@@ -19,13 +27,115 @@ const AddEditDialog: FC<{
   productId: number | null;
 }> = ({ open, onClose, onSubmit, productId }) => {
   const [formData, setFormData] = useState<ProductDto | {}>({});
+  const [supplierList, setSupplierList] = useState<SupplierDto[] | undefined>(
+    []
+  );
+
   const handleChange = (e: any) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const dispatch = useDispatch();
+ 
   const handleSubmit = () => {
-    onClose();
+    if (!("productName" in formData) || formData.productName?.trim() === "") {
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Product Name cannot be empty",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+    if (!("supplierId" in formData) || formData.supplierId === -1) {
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Supplier cannot be empty",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+    if (
+      !("quantityPerUnit" in formData) ||
+      formData.quantityPerUnit?.trim() === ""
+    ) {
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Quantity per Unit cannot be empty",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+   
+    if (!utilities.isNumeric(formData.unitPrice)) {
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Unit Price cannot be empty",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+
+    if (!utilities.isNumeric(formData.unitsInStock)) {
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Units in Stock cannot be empty",
+          type: "error",
+        })
+      );
+      return;
+    }
+    
+    if (!utilities.isNumeric(formData.unitsOnOrder)) {
+  
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Units on Order cannot be empty",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+    if (!utilities.isNumeric(formData.reorderLevel)) {
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Reorder Level cannot be empty",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+    if (!("discontinued" in formData) ||  (formData.discontinued !== 0 &&  formData.discontinued !== 1)  ) {
+      dispatch(
+        handleApplicationWideMessage({
+          value: "Discontinued can only be 1 or 0",
+          type: "error",
+        })
+      );
+      return;
+    }
+
+    onSubmit({});
   };
+
+  const { data: supplierListData, isFetching } = useGetSuppliersQuery();
+
+  useEffect(() => {
+    handleProgressIndicator(isFetching);
+  }, [isFetching]);
+
+  useEffect(() => {
+    setSupplierList(supplierListData);
+  }, [supplierListData]);
 
   const { data } = useGetProductByidQuery(productId == null ? -1 : productId, {
     skip: productId == null,
@@ -34,11 +144,19 @@ const AddEditDialog: FC<{
   useEffect(() => {
     if (data && productId) setFormData(data);
     else setFormData({});
-  }, [data, productId]);
+  }, [data, productId, open]);
+
+  const suppliersOptions = supplierList?.map((supplier, i) => (
+    <MenuItem value={supplier.supplierId} key={supplier.supplierId}>
+      {supplier.contactName}
+    </MenuItem>
+  ));
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>{productId == null ? "Insert" : "Update"}</DialogTitle>
+      <DialogTitle>
+        {productId == null ? "Insert Product" : "Update Product"}
+      </DialogTitle>
       <DialogContent>
         <TextField
           label="Product name"
@@ -48,8 +166,14 @@ const AddEditDialog: FC<{
           fullWidth
           margin="dense"
         />
-        <Select value={-1} name="supplierId" fullWidth>
+        <Select
+          value={"supplierId" in formData ? formData.supplierId : "-1"}
+          name="supplierId"
+          onChange={handleChange}
+          fullWidth
+        >
           <MenuItem value={-1}>Select a Supplier</MenuItem>
+          {suppliersOptions}
         </Select>
         <TextField
           label="Quantity Per Unit"
@@ -69,8 +193,8 @@ const AddEditDialog: FC<{
           margin="dense"
         />
         <TextField
-          label="Unit in Stock"
-          name="unitInStock"
+          label="Units in Stock"
+          name="unitsInStock"
           type="number"
           value={"unitsInStock" in formData ? formData.unitsInStock : ""}
           onChange={handleChange}

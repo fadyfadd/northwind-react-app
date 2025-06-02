@@ -27,11 +27,12 @@ const uiSlice = createSlice({
     handleApplicationWideMessage(
       state: ScreenState,
       action: PayloadAction<{
-        value: string | null;
+      value: string | null;
         type: "error" | "info" | "success" | "warning";
       }>
-    ) {
+    ) {      
       state.message = action.payload;
+      
     },
   },
 });

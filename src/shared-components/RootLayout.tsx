@@ -20,7 +20,7 @@ const RootLayout: FC = () => {
   }
 
   var uiSelector = useSelector((state: RootState) => state.ui);
-
+ 
   if (authSelector.token)
     return (
       <div style={{margin:'10px'}}>
