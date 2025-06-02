@@ -7,9 +7,9 @@ export const productApi = createApi({
   endpoints: (builder) => ({    
     getProducts: builder.query<ProductDto[] , void>({query:()=>`Product/All`}),
     getProductByid: builder.query<ProductDto, number>({
-      query: (id) => `${id}`,
+      query: (id) => `Product/${id}`,
     }),
-  }),  
+}),  
 });
 
 export const {useGetProductByidQuery , useGetProductsQuery} = productApi;

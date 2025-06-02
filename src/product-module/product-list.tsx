@@ -17,6 +17,8 @@ const ProductList: FC = () => {
     setIsConfirmationOpen(true);
   }
 
+
+
   const [productId, setProductId] = useState<number | null>(null);
 
   function onEdit(productId: number) {
