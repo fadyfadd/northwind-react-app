@@ -91,7 +91,7 @@ const ProductList: FC = () => {
 
   useEffect(() => {
     dispatch(handleProgressIndicator(isFetching));
-  }, [dispatch, isFetching]);
+}, [dispatch, isFetching]);
 
   function onConfirm() {
     setIsConfirmationOpen(false);

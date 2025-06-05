@@ -6,6 +6,8 @@ export const productApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_API_NORTHWIND_API,
   }),
+  tagTypes: ["Products"],
+
   endpoints: (builder) => ({
     saveOrUpdateProduct: builder.mutation<ProductDto, ProductDto>({
       query: (product: ProductDto) => ({
@@ -13,14 +15,21 @@ export const productApi = createApi({
         method: "post",
         body: product,
       }),
+      invalidatesTags: ["Products"],
     }),
     getProducts: builder.query<ProductDto[], void>({
       query: () => `Product/All`,
+      providesTags: ["Products"],
     }),
     getProductByid: builder.query<ProductDto, number>({
       query: (id) => `Product/${id}`,
+      providesTags: ["Products"],
     }),
   }),
 });
 
-export const { useGetProductByidQuery, useGetProductsQuery } = productApi;
+export const {
+  useGetProductByidQuery,
+  useGetProductsQuery,
+  useSaveOrUpdateProductMutation,
+} = productApi;

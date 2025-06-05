@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { ProductDto } from "../data-transfer-object/product-dto";
-import { useGetProductByidQuery } from "../store/apis/product-api";
+import { useGetProductByidQuery, useSaveOrUpdateProductMutation } from "../store/apis/product-api";
 import { useGetSuppliersQuery } from "../store/apis/supplier-apis";
 import { SupplierDto } from "../data-transfer-object/supplier-dto";
 import {
@@ -30,6 +30,9 @@ const AddEditDialog: FC<{
   const [supplierList, setSupplierList] = useState<SupplierDto[] | undefined>(
     []
   );
+
+const [trigger , {isLoading ,  error , data:mutationData}] = useSaveOrUpdateProductMutation(); 
+
 
   const handleChange = (e: any) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -121,9 +124,12 @@ const AddEditDialog: FC<{
           type: "error",
         })
       );
-      return;
+      return
+      ;
     }
 
+ 
+    trigger(formData)
     onSubmit({});
   };
 
@@ -142,8 +148,13 @@ const AddEditDialog: FC<{
   });
 
   useEffect(() => {
-    if (data && productId) setFormData(data);
-    else setFormData({});
+  
+    if (data && productId) {
+      const newData = {...data , supplier:null}     
+      setFormData(newData);
+      
+    }
+    else setFormData({categoryId:1});
   }, [data, productId, open]);
 
   const suppliersOptions = supplierList?.map((supplier, i) => (
